@@ -31,7 +31,7 @@ export function getRankingPoints(ranking: number): number | null {
   return null;
 }
 
-export function awardVictoryPoints(winner: Player, loser: Player): number {
+export function awardVictoryPoints(loser: Player): number {
   const rankingPoints = getRankingPoints(loser.ranking);
   if (rankingPoints !== null) {
     return rankingPoints;
