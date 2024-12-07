@@ -1,16 +1,20 @@
-import { awardVictoryPoints, groupPointsMap, getRankingPoints } from "@/utils/points";
-import { Player } from "@/models/player";
-import { RankingGroup } from "@/constants/ranking";
+import {
+  awardVictoryPoints,
+  groupPointsMap,
+  getRankingPoints,
+} from '@/utils/points';
+import { Player } from '@/models/player';
+import { RankingGroup } from '@/constants/ranking';
 
-describe("Match Points Utility", () => {
-    const createPlayer = (name: string, ranking: number): Player => {
-        const player = new Player(name, ranking);
-        jest.spyOn(player, "group", "get").mockReturnValue(player.group);
-        return player;
-    };
-      
-  describe("getRankingPoints", () => {
-    it("should return the correct points for valid ranking ranges", () => {
+describe('Match Points Utility', () => {
+  const createPlayer = (name: string, ranking: number): Player => {
+    const player = new Player(name, ranking);
+    jest.spyOn(player, 'group', 'get').mockReturnValue(player.group);
+    return player;
+  };
+
+  describe('getRankingPoints', () => {
+    it('should return the correct points for valid ranking ranges', () => {
       expect(getRankingPoints(1)).toBe(200);
       expect(getRankingPoints(5)).toBe(200);
       expect(getRankingPoints(6)).toBe(175);
@@ -22,53 +26,53 @@ describe("Match Points Utility", () => {
       expect(getRankingPoints(300)).toBe(20);
     });
 
-    it("should return null for rankings above 300", () => {
+    it('should return null for rankings above 300', () => {
       expect(getRankingPoints(301)).toBeNull();
       expect(getRankingPoints(1000)).toBeNull();
     });
 
-    it("should throw no errors for unexpected inputs (e.g., negative or zero rankings)", () => {
+    it('should throw no errors for unexpected inputs (e.g., negative or zero rankings)', () => {
       expect(getRankingPoints(-1)).toBeNull();
       expect(getRankingPoints(0)).toBeNull();
     });
   });
 
-  describe("awardVictoryPoints", () => {
-    it("should calculate points based on ranking for players with ranking <= 300", () => {
-      const winner = createPlayer("Winner", 100);
-      const loser = createPlayer("Loser", 15);
+  describe('awardVictoryPoints', () => {
+    it('should calculate points based on ranking for players with ranking <= 300', () => {
+      const winner = createPlayer('Winner', 100);
+      const loser = createPlayer('Loser', 15);
 
       const points = awardVictoryPoints(winner, loser);
       expect(points).toBe(150);
     });
 
-    it("should calculate points based on group for players with ranking > 300", () => {
-      const winner = createPlayer("Winner", 100);
-      const loser = createPlayer("Loser", 301);
+    it('should calculate points based on group for players with ranking > 300', () => {
+      const winner = createPlayer('Winner', 100);
+      const loser = createPlayer('Loser', 301);
 
       const points = awardVictoryPoints(winner, loser);
       expect(points).toBe(8);
     });
 
-    it("should throw an error for invalid groups", () => {
-      const winner = createPlayer("Winner", 100);
-      const loser = createPlayer("Loser", 301);
+    it('should throw an error for invalid groups', () => {
+      const winner = createPlayer('Winner', 100);
+      const loser = createPlayer('Loser', 301);
 
       expect(() => awardVictoryPoints(winner, loser)).toThrow(
-        "Invalid ranking or group for points calculation"
+        'Invalid ranking or group for points calculation'
       );
     });
 
-    it("should prioritize ranking-based points for players <= 300", () => {
-      const winner = createPlayer("Winner", 100);
-      const loser = createPlayer("Loser", 100);
+    it('should prioritize ranking-based points for players <= 300', () => {
+      const winner = createPlayer('Winner', 100);
+      const loser = createPlayer('Loser', 100);
 
       const points = awardVictoryPoints(winner, loser);
       expect(points).toBe(40);
     });
 
-    it("should calculate points correctly for edge cases of ranking ranges", () => {
-      const winner = createPlayer("Winner", 50);
+    it('should calculate points correctly for edge cases of ranking ranges', () => {
+      const winner = createPlayer('Winner', 50);
 
       const edgeCaseRankings = [
         { ranking: 5, expectedPoints: 200 },
@@ -80,20 +84,20 @@ describe("Match Points Utility", () => {
       ];
 
       edgeCaseRankings.forEach(({ ranking, expectedPoints }) => {
-        const loser = createPlayer("Loser", ranking);
+        const loser = createPlayer('Loser', ranking);
         expect(awardVictoryPoints(winner, loser)).toBe(expectedPoints);
       });
     });
 
-    it("should calculate points correctly for all valid groups", () => {
-        const winner = createPlayer("Winner", 100);
-      
-        Object.entries(groupPointsMap).forEach(([groupKey, points]) => {
-          const group = RankingGroup[groupKey as keyof typeof RankingGroup];
-          const loser = createPlayer("Loser", 1000);
-      
-          expect(awardVictoryPoints(winner, loser)).toBe(points);
-        });
-      });      
+    it('should calculate points correctly for all valid groups', () => {
+      const winner = createPlayer('Winner', 100);
+
+      Object.entries(groupPointsMap).forEach(([groupKey, points]) => {
+        const group = RankingGroup[groupKey as keyof typeof RankingGroup];
+        const loser = createPlayer('Loser', 1000);
+
+        expect(awardVictoryPoints(winner, loser)).toBe(points);
+      });
+    });
   });
 });

@@ -1,62 +1,66 @@
-import { Category, Size, Stars, Type } from "@/constants/tournament";
-import { randomUUID, UUID } from "crypto";
-import { Player } from "./player";
-import { Round } from "./round";
+import { Category, Size, Stars, Type } from '@/constants/tournament';
+import { randomUUID, UUID } from 'crypto';
+import { Player } from './player';
+import { Round } from './round';
 
 export class Tournament {
-    private _id: UUID;
-    private _name: string;
-    private _stars: Stars;
-    private _byes: number;
-    private _size: Size;
-    private _priceMoney: number;
-    private _category: Category;
-    private _type: Type;
-    private _players: Player[];
-    private _rounds: Round[] = [];
+  private _id: UUID;
+  private _name: string;
+  private _stars: Stars;
+  private _byes: number;
+  private _size: Size;
+  private _priceMoney: number;
+  private _category: Category;
+  private _type: Type;
+  private _players: Player[];
+  private _rounds: Round[] = [];
 
-    public constructor(name: string, players: Player[], category: Category = Category.ABSOLUTE, priceMoney: number = 0, type: Type = Type.DEFAULT) {
-        this._id = randomUUID();
-        this._name = name;
-        this._players = players;
-        this._priceMoney = priceMoney;
-        this._category = category;
-        this._type = type;
-        this._stars = this.calculateStars();
-        this._byes = this.calculateByes();
-        this._size = this.calculateSize();
-    }
+  public constructor(
+    name: string,
+    players: Player[],
+    category: Category = Category.ABSOLUTE,
+    priceMoney: number = 0,
+    type: Type = Type.DEFAULT
+  ) {
+    this._id = randomUUID();
+    this._name = name;
+    this._players = players;
+    this._priceMoney = priceMoney;
+    this._category = category;
+    this._type = type;
+    this._stars = this.calculateStars();
+    this._byes = this.calculateByes();
+    this._size = this.calculateSize();
+  }
 
-    public start(): void {
+  public start(): void {}
 
-    }
+  // TODO
+  private calculateStars(): Stars {
+    return Stars.PLACEHOLDER;
+  }
 
-    // TODO
-    private calculateStars(): Stars {
-        return Stars.PLACEHOLDER;
-    }
+  // TODO
+  private calculateByes(): number {
+    return 0;
+  }
 
-    // TODO
-    private calculateByes(): number {
-        return 0;
-    }
-
-    // TODO
-    private calculateSize(): Size {
-        return Size.SIZE_16;
-    }
+  // TODO
+  private calculateSize(): Size {
+    return Size.SIZE_16;
+  }
 }
 
 // IDEA:
 
 // class Draw {
 //     rounds: Round[] = [];
-  
+
 //     constructor(public players: Player[]) {
 //       this.validatePlayers();
 //       this.createInitialRound();
 //     }
-  
+
 //     /**
 //      * Create the initial round from the list of players.
 //      */
@@ -69,7 +73,7 @@ export class Tournament {
 //       }
 //       this.rounds.push(round);
 //     }
-  
+
 //     /**
 //      * Generate the next round based on winners of the current round.
 //      */
@@ -78,7 +82,7 @@ export class Tournament {
 //       if (!currentRound.isComplete()) {
 //         throw new Error("Current round is not complete.");
 //       }
-  
+
 //       const nextRound = new Round(this.rounds.length + 1);
 //       for (const matchup of currentRound.matches) {
 //         if (matchup.winner === null) {
@@ -86,12 +90,12 @@ export class Tournament {
 //         }
 //         nextRound.addMatchup(new Matchup(matchup.winner, null));
 //       }
-  
+
 //       // Pair up players in the next round
 //       for (let i = 0; i < nextRound.matches.length - 1; i += 2) {
 //         nextRound.matches[i].player2 = nextRound.matches[i + 1].player1;
 //       }
-  
+
 //       this.rounds.push(nextRound);
 //     }
 
@@ -121,7 +125,7 @@ export class Tournament {
 
 //     this.rounds.push(nextRound);
 // }
-  
+
 //     /**
 //      * Print the draw structure for visualization.
 //      */
@@ -138,4 +142,3 @@ export class Tournament {
 //       }
 //     }
 //   }
-  

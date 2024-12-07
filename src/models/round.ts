@@ -1,4 +1,4 @@
-import { Match } from "./match";
+import { Match } from './match';
 
 export class Round {
   private _matches: Match[];
@@ -13,7 +13,7 @@ export class Round {
   }
 
   public isComplete(): boolean {
-    return this._matches.every(match => match.isComplete);
+    return this._matches.every((match) => match.isComplete);
   }
 
   public get matches(): Match[] {
@@ -21,6 +21,8 @@ export class Round {
   }
 
   public getMatchDetails(): string[] {
-    return this._matches.map((match, index) => `Match ${index + 1}: ${match.getMatchDetails()}`);
+    return this._matches.map(
+      (match, index) => `Match ${index + 1}: ${match.getMatchDetails()}`
+    );
   }
 }

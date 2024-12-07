@@ -1,6 +1,6 @@
-import { RankingGroup } from "@/constants/ranking";
-import { randomUUID, UUID } from "crypto";
-import { Competitor } from "./competitor";
+import { RankingGroup } from '@/constants/ranking';
+import { randomUUID, UUID } from 'crypto';
+import { Competitor } from './competitor';
 
 export class Player extends Competitor {
   private _id: UUID;
@@ -18,7 +18,7 @@ export class Player extends Competitor {
 
   private calculateGroup(): RankingGroup {
     const ranking = this._ranking;
-  
+
     if (ranking >= 1 && ranking <= 50) {
       return RankingGroup.FIRST_CATEGORY;
     } else if (ranking >= 51 && ranking <= 150) {
@@ -46,7 +46,7 @@ export class Player extends Competitor {
     } else if (ranking === 16491) {
       return RankingGroup.GROUP_1;
     }
-  
+
     throw new Error('Invalid ranking value for group calculation');
   }
 

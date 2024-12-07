@@ -1,22 +1,21 @@
-import { RankingGroup } from "@/constants/ranking";
-import { Player } from "@/models/player";
+import { RankingGroup } from '@/constants/ranking';
+import { Player } from '@/models/player';
 
 export const groupPointsMap: Record<RankingGroup, number> = {
-    [RankingGroup.FIRST_CATEGORY]: 200,
-    [RankingGroup.SECOND_CATEGORY_A]: 175,
-    [RankingGroup.SECOND_CATEGORY_B]: 150,
-    [RankingGroup.GROUP_10]: 10,
-    [RankingGroup.GROUP_9]: 9,
-    [RankingGroup.GROUP_8]: 8,
-    [RankingGroup.GROUP_7]: 7,
-    [RankingGroup.GROUP_6]: 6,
-    [RankingGroup.GROUP_5]: 5,
-    [RankingGroup.GROUP_4]: 4,
-    [RankingGroup.GROUP_3]: 3,
-    [RankingGroup.GROUP_2]: 2,
-    [RankingGroup.GROUP_1]: 1,
+  [RankingGroup.FIRST_CATEGORY]: 200,
+  [RankingGroup.SECOND_CATEGORY_A]: 175,
+  [RankingGroup.SECOND_CATEGORY_B]: 150,
+  [RankingGroup.GROUP_10]: 10,
+  [RankingGroup.GROUP_9]: 9,
+  [RankingGroup.GROUP_8]: 8,
+  [RankingGroup.GROUP_7]: 7,
+  [RankingGroup.GROUP_6]: 6,
+  [RankingGroup.GROUP_5]: 5,
+  [RankingGroup.GROUP_4]: 4,
+  [RankingGroup.GROUP_3]: 3,
+  [RankingGroup.GROUP_2]: 2,
+  [RankingGroup.GROUP_1]: 1,
 };
-  
 
 export function getRankingPoints(ranking: number): number | null {
   if (ranking >= 1 && ranking <= 5) return 200;
@@ -33,7 +32,6 @@ export function getRankingPoints(ranking: number): number | null {
 }
 
 export function awardVictoryPoints(winner: Player, loser: Player): number {
-
   const rankingPoints = getRankingPoints(loser.ranking);
   if (rankingPoints !== null) {
     return rankingPoints;
@@ -44,5 +42,5 @@ export function awardVictoryPoints(winner: Player, loser: Player): number {
     return groupPoints;
   }
 
-  throw new Error("Invalid ranking or group for points calculation");
+  throw new Error('Invalid ranking or group for points calculation');
 }
