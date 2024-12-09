@@ -57,4 +57,12 @@ export class Match {
     const winnerName = this._winner ? this._winner.name : 'TBD';
     return `${player1Name} vs ${player2Name} - Winner: ${winnerName}`;
   }
+
+  public get player1(): Competitor | null {
+    return this._player1;
+  }
+
+  public get player2(): Competitor | null {
+    return this._player2;
+  }
 }
