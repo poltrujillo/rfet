@@ -1,14 +1,21 @@
 import { Match } from './match';
 import { RoundType, determineRoundType } from '@/constants/rounds';
 import { Player } from '@/models/player';
+import { randomUUID, UUID } from 'crypto';
 
 export class Round {
+  private _id: UUID;
   private _matches: Match[];
   private _roundType: RoundType;
   private _roundNumber: number;
   private _totalPlayers: number;
 
-  constructor(matches: Match[], roundNumber: number, totalPlayers: number) {
+  public constructor(
+    matches: Match[],
+    roundNumber: number,
+    totalPlayers: number
+  ) {
+    this._id = randomUUID();
     this._matches = matches;
     this._roundNumber = roundNumber;
     this._totalPlayers = totalPlayers;
@@ -17,6 +24,10 @@ export class Round {
 
   public get roundType(): RoundType {
     return this._roundType;
+  }
+
+  get id(): UUID {
+    return this._id;
   }
 
   public get roundNumber(): number {

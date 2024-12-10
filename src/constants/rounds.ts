@@ -15,6 +15,12 @@ export function determineRoundType(
   const totalRounds = Math.ceil(Math.log2(totalPlayers));
   const roundsFromEnd = totalRounds - roundNumber;
 
+  if (roundNumber > totalRounds) {
+    throw new Error(
+      `Invalid roundNumber: ${roundNumber} exceeds totalRounds: ${totalRounds}`
+    );
+  }
+
   switch (roundsFromEnd) {
     case 0:
       return RoundType.FINAL;
@@ -31,6 +37,6 @@ export function determineRoundType(
     case 6:
       return RoundType.ROUND_OF_128;
     default:
-      throw new Error('Unsupported round number');
+      throw new Error(`Unsupported roundNumber: ${roundNumber}`);
   }
 }

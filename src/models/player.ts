@@ -3,12 +3,12 @@ import { randomUUID, UUID } from 'crypto';
 import { Competitor } from './competitor';
 
 export class Player extends Competitor {
-  private _id: UUID;
+  public _id: UUID;
   private _name: string;
   private _ranking: number;
   private _group: RankingGroup;
 
-  constructor(name: string, ranking: number) {
+  public constructor(name: string, ranking: number) {
     super();
     this._id = randomUUID();
     this._name = name;

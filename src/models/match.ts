@@ -1,14 +1,17 @@
+import { randomUUID, UUID } from 'crypto';
 import { Bye } from './bye';
 import { Competitor } from './competitor';
 import { Player } from './player';
 
 export class Match {
+  private _id: UUID;
   private _player1: Competitor | null;
   private _player2: Competitor | null;
   private _winner: Competitor | null = null;
   private _isComplete: boolean = false;
 
-  constructor(player1: Competitor, player2: Competitor) {
+  public constructor(player1: Competitor, player2: Competitor) {
+    this._id = randomUUID();
     this._player1 = player1;
     this._player2 = player2;
 
@@ -30,7 +33,7 @@ export class Match {
     }
   }
 
-  public setWinner(winner: Competitor): void {
+  public setWinner(winner: Player): void {
     if (this._isComplete) {
       throw new Error('The match is already complete.');
     }
@@ -64,5 +67,9 @@ export class Match {
 
   public get player2(): Competitor | null {
     return this._player2;
+  }
+
+  get id(): UUID {
+    return this._id;
   }
 }

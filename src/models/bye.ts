@@ -3,7 +3,7 @@ import { Competitor } from './competitor';
 export class Bye extends Competitor {
   private _name: string;
 
-  constructor() {
+  public constructor() {
     super();
     this._name = 'Bye';
   }
