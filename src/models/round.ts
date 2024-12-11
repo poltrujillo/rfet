@@ -88,13 +88,11 @@ export class Round {
   }
 
   public validateRound(): boolean {
-    // Check if number of matches is correct for the round
     const expectedMatches = this._totalPlayers / Math.pow(2, this._roundNumber);
     if (this._matches.length !== Math.floor(expectedMatches)) {
       return false;
     }
 
-    // Check if all matches have valid competitors
     return this._matches.every((match) => {
       const player1 = match.player1;
       const player2 = match.player2;

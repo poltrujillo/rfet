@@ -1,9 +1,9 @@
 import { Category, Size, Stars, Type } from '@/constants/tournament';
-import { Bye } from './bye';
-import { Competitor } from './competitor';
-import { Match } from './match';
-import { Player } from './player';
-import { Round } from './round';
+import { Bye } from '@/models/bye';
+import { Competitor } from '@/models/competitor';
+import { Match } from '@/models/match';
+import { Player } from '@/models/player';
+import { Round } from '@/models/round';
 import { randomUUID, UUID } from 'crypto';
 import { getStarsByPlayersAndMoney } from '@/utils/stars';
 
@@ -16,7 +16,7 @@ export class Tournament {
   private _priceMoney: number;
   private _category: Category;
   private _type: Type;
-  private _competitors: Competitor[] = []; // Includes both players and byes
+  private _competitors: Competitor[] = [];
   private _rounds: Round[] = [];
 
   public constructor(
