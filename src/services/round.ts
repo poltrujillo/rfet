@@ -1,5 +1,5 @@
 import { Round } from '@/models/round';
-import { Repository } from '@/utils/repository';
+import { Repository } from '@/utils/storage/repository';
 
 class RoundManager {
   private static _repository = new Repository<Round>();

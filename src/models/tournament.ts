@@ -156,6 +156,10 @@ export class Tournament {
     return this._rounds;
   }
 
+  public get name() {
+    return this._name;
+  }
+
   public get id(): string {
     return this._id;
   }

@@ -1,5 +1,5 @@
 import { Match } from '@/models/match';
-import { Repository } from '@/utils/repository';
+import { Repository } from '@/utils/storage/repository';
 
 class PlayerManager {
   private static _repository = new Repository<Match>();

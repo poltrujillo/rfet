@@ -1,55 +1,39 @@
 'use client';
 
-import { useState } from 'react';
-import { usePlayerContext } from '@/context/player-provider';
-import { Button } from '../common/button';
-import { Input } from '../common/input';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
 
-export const AddPlayerForm = () => {
-  const { addPlayer, resetPlayers } = usePlayerContext();
+interface AddPlayerFormProps {
+  newPlayerName: string;
+  newPlayerRanking: string;
+  onNameChange: (value: string) => void;
+  onRankingChange: (value: string) => void;
+  onAddPlayer: () => void;
+}
 
-  const [name, setName] = useState('');
-  const [ranking, setRanking] = useState('');
-  const [idCounter, setIdCounter] = useState(1);
-
-  const handleAddPlayer = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    if (name && ranking) {
-      addPlayer({ id: idCounter, name, ranking: Number(ranking) });
-      setIdCounter(idCounter + 1);
-      setName('');
-      setRanking('');
-    }
-  };
-
+export function AddPlayerForm({
+  newPlayerName,
+  newPlayerRanking,
+  onNameChange,
+  onRankingChange,
+  onAddPlayer,
+}: AddPlayerFormProps) {
   return (
-    <form className="flex-col flex h-full w-full gap-3 justify-center items-center">
-      <h2 className="text-2xl font-semibold text-slate-200">Add Player</h2>
+    <div className="flex items-center gap-2">
       <Input
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        placeholder="Player name"
+        value={newPlayerName}
+        onChange={(e) => onNameChange(e.target.value)}
+        className="bg-white text-gray-900 border-gray-200"
       />
       <Input
+        type="number"
         placeholder="Ranking"
-        value={ranking}
-        onChange={(e) => setRanking(e.target.value)}
+        value={newPlayerRanking}
+        onChange={(e) => onRankingChange(e.target.value)}
+        className="bg-white text-gray-900 border-gray-200"
       />
-      <Button
-        label="Add Player"
-        primary={true}
-        onClickEvent={handleAddPlayer}
-      />
-      <Button
-        label="Reset Players"
-        primary={false}
-        onClickEvent={(e) => {
-          e.preventDefault();
-          resetPlayers();
-          setIdCounter(1);
-        }}
-      />
-    </form>
+      <Button onClick={onAddPlayer}>Add</Button>
+    </div>
   );
-};
+}
