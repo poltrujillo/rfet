@@ -124,8 +124,9 @@ export class Tournament {
 
     // Progress to the next round only if the current round is complete
     if (round.isComplete()) {
-      const remainingCompetitors = this._rounds
-        .flatMap((r) => r.matches.map((m) => m.winner))
+      const currentRound = this._rounds[roundNumber - 1];
+      const remainingCompetitors = currentRound.matches
+        .map((m) => m.winner)
         .filter((competitor) => competitor !== null);
 
       if (remainingCompetitors.length > 1) {

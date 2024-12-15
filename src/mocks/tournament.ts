@@ -2,6 +2,8 @@
 import { Tournament } from '@/models/tournament';
 import { Player } from '@/models/player';
 import { Category } from '@/constants/tournament';
+import { Bye } from '@/models/bye';
+import { Competitor } from '@/models/competitor';
 
 // Create mock players with different rankings
 const mockPlayers: Player[] = [
@@ -29,62 +31,41 @@ export function createMockTournament(): Tournament {
     Category.ABSOLUTE
   );
 
+  // Separate players and byes
+  const players = tournament.competitors.filter((c) => c instanceof Player);
+  const byes = tournament.competitors.filter((c) => c instanceof Bye);
+
+  // Create the new order
+  const newOrder: Competitor[] = [];
+  let playerIndex = 0;
+  let byeIndex = 0;
+
+  for (let i = 0; i < tournament.competitors.length; i++) {
+    // Add a bye every 3rd position until we run out of byes
+    if (byeIndex < byes.length && i % 3 === 1) {
+      newOrder.push(byes[byeIndex]);
+      byeIndex++;
+    } else if (playerIndex < players.length) {
+      newOrder.push(players[playerIndex]);
+      playerIndex++;
+    }
+  }
+
+  // Add any remaining competitors
+  while (playerIndex < players.length) {
+    newOrder.push(players[playerIndex]);
+    playerIndex++;
+  }
+  while (byeIndex < byes.length) {
+    newOrder.push(byes[byeIndex]);
+    byeIndex++;
+  }
+
+  // Reorganize the tournament with the new order
+  tournament.reorganizeCompetitors(newOrder);
+
+  // Start the tournament
+  tournament.start();
+
   return tournament;
-  //   tournament.start();
-  //   console.log(tournament);
-
-  //   // Simulate some matches
-  //   // First round matches (with 4 byes due to 12 players in a 16-player bracket)
-  //   tournament.setWinner(1, 0, mockPlayers[0]); // Nadal wins first match
-  //   tournament.setWinner(1, 1, mockPlayers[2]); // Federer wins second match
-  //   tournament.setWinner(1, 2, mockPlayers[4]); // Wawrinka wins third match
-  //   tournament.setWinner(1, 3, mockPlayers[6]); // Thiem wins fourth match
-
-  //   // Quarter-finals
-  //   tournament.setWinner(2, 0, mockPlayers[0]); // Nadal wins
-  //   tournament.setWinner(2, 1, mockPlayers[2]); // Federer wins
-
-  //   // Semi-final
-  //   tournament.setWinner(3, 0, mockPlayers[0]); // Nadal wins and reaches final
-
-  //   // You can log the tournament details to see the structure
-  //   console.log('Tournament Details:', tournament.getTournamentDetails());
-  //   console.log('\nAll Rounds:');
-  //   tournament.rounds.forEach((round, index) => {
-  //     console.log(`\nRound ${index + 1} (${round.roundType}):`);
-  //     round.matches.forEach((match, matchIndex) => {
-  //       console.log(`Match ${matchIndex + 1}:`, match.getMatchDetails());
-  //     });
-  //   });
-
-  //   return tournament;
-  // }
-
-  // // Function to display the tournament in a more readable format
-  // export function displayTournamentStructure(tournament: Tournament): void {
-  //   console.log('='.repeat(50));
-  //   console.log('TOURNAMENT STRUCTURE');
-  //   console.log('='.repeat(50));
-  //   console.log('\nTournament Details:');
-  //   console.log(tournament.getTournamentDetails());
-
-  //   console.log('\nRounds Structure:');
-  //   tournament.rounds.forEach((round, roundIndex) => {
-  //     console.log('\n' + '-'.repeat(30));
-  //     console.log(`Round ${roundIndex + 1} - ${round.roundType}`);
-  //     console.log('-'.repeat(30));
-
-  //     round.matches.forEach((match, matchIndex) => {
-  //       console.log(`\nMatch ${matchIndex + 1}:`);
-  //       console.log(`Player 1: ${match.player1?.name || 'BYE'}`);
-  //       console.log(`Player 2: ${match.player2?.name || 'BYE'}`);
-  //       console.log(`Winner: ${match.winner?.name || 'Not played yet'}`);
-  //     });
-  //   });
-
-  //   console.log('\n' + '='.repeat(50));
 }
-
-// Usage example:
-// const mockTournament = createMockTournament();
-// displayTournamentStructure(mockTournament);
