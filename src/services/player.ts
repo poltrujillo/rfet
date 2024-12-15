@@ -1,6 +1,5 @@
 import { Player } from '@/models/player';
 import { Repository } from '@/utils/repository';
-import { UUID } from 'crypto';
 
 class PlayerManager {
   private static _repository = new Repository<Player>();
@@ -9,11 +8,11 @@ class PlayerManager {
     this._repository.add(round);
   }
 
-  public static getRoundById(id: UUID): Player | undefined {
+  public static getRoundById(id: string): Player | undefined {
     return this._repository.get(id);
   }
 
-  public static removeRound(id: UUID): void {
+  public static removeRound(id: string): void {
     this._repository.remove(id);
   }
 

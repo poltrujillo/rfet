@@ -1,37 +1,16 @@
 'use client';
 
-import DraggableItem from '@/components/dnd/draggable-item';
-import DroppableList from '@/components/dnd/droppable-list';
-import DragDropContextProvider from '@/context/drag-drop-provider';
-import { reorderList } from '@/utils/list-manager';
-import { useState } from 'react';
+import { PlayerList } from '@/components/player/player-list';
+import { Player } from '@/models/player';
 
 export default function Home() {
-  const [items, setItems] = useState([
-    { id: '1', content: 'Item 1' },
-    { id: '2', content: 'Item 2' },
-    { id: '3', content: 'Item 3' },
-  ]);
+  const mockPlayers = [
+    new Player('John Doe', 25),
+    new Player('Jane Smith', 75),
+    new Player('Bob Johnson', 200),
+    new Player('Alice Williams', 450),
+    new Player('Mike Brown', 750),
+  ];
 
-  const handleDragEnd = (result: any) => {
-    const { source, destination } = result;
-
-    if (!destination) return; // Ignore drop outside list
-
-    setItems((prevItems) =>
-      reorderList(prevItems, source.index, destination.index)
-    );
-  };
-
-  return (
-    <DragDropContextProvider onDragEnd={handleDragEnd}>
-      <DroppableList droppableId="vertical-list">
-        {items.map((item, index) => (
-          <DraggableItem key={item.id} draggableId={item.id} index={index}>
-            {item.content}
-          </DraggableItem>
-        ))}
-      </DroppableList>
-    </DragDropContextProvider>
-  );
+  return <PlayerList players={mockPlayers} />;
 }

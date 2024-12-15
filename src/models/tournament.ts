@@ -4,11 +4,11 @@ import { Competitor } from '@/models/competitor';
 import { Match } from '@/models/match';
 import { Player } from '@/models/player';
 import { Round } from '@/models/round';
-import { randomUUID, UUID } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 import { getStarsByPlayersAndMoney } from '@/utils/stars';
 
 export class Tournament {
-  private _id: UUID;
+  private _id: string;
   private _name: string;
   private _stars: Stars;
   private _byes: number;
@@ -26,7 +26,7 @@ export class Tournament {
     category: Category = Category.ABSOLUTE,
     type: Type = Type.DEFAULT
   ) {
-    this._id = randomUUID();
+    this._id = uuidv4();
     this._name = name;
     this._priceMoney = priceMoney;
     this._category = category;
@@ -137,7 +137,7 @@ export class Tournament {
     return this._rounds;
   }
 
-  get id(): UUID {
+  public get id(): string {
     return this._id;
   }
 

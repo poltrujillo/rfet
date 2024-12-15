@@ -1,17 +1,18 @@
-import { randomUUID, UUID } from 'crypto';
 import { Bye } from './bye';
 import { Competitor } from './competitor';
+import { v4 as uuidv4 } from 'uuid';
+
 import { Player } from './player';
 
 export class Match {
-  private _id: UUID;
+  private _id: string;
   private _player1: Competitor | null;
   private _player2: Competitor | null;
   private _winner: Competitor | null = null;
   private _isComplete: boolean = false;
 
   public constructor(player1: Competitor, player2: Competitor) {
-    this._id = randomUUID();
+    this._id = uuidv4();
     this._player1 = player1;
     this._player2 = player2;
 
@@ -69,7 +70,7 @@ export class Match {
     return this._player2;
   }
 
-  get id(): UUID {
+  public get id(): string {
     return this._id;
   }
 }

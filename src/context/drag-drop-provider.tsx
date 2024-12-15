@@ -1,4 +1,3 @@
-import React from 'react';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 
 interface Props {

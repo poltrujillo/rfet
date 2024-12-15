@@ -1,16 +1,16 @@
 import { RankingGroup } from '@/constants/ranking';
-import { randomUUID, UUID } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 import { Competitor } from './competitor';
 
 export class Player extends Competitor {
-  public _id: UUID;
+  public _id: string;
   private _name: string;
   private _ranking: number;
   private _group: RankingGroup;
 
   public constructor(name: string, ranking: number) {
     super();
-    this._id = randomUUID();
+    this._id = uuidv4();
     this._name = name;
     this._ranking = ranking;
     this._group = this.calculateGroup();
@@ -50,7 +50,7 @@ export class Player extends Competitor {
     throw new Error('Invalid ranking value for group calculation');
   }
 
-  get id(): UUID {
+  public get id(): string {
     return this._id;
   }
 
@@ -58,11 +58,11 @@ export class Player extends Competitor {
     return this._name;
   }
 
-  get ranking(): number {
+  public get ranking(): number {
     return this._ranking;
   }
 
-  get group(): RankingGroup {
+  public get group(): RankingGroup {
     return this._group;
   }
 }

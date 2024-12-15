@@ -1,6 +1,5 @@
 import { Round } from '@/models/round';
 import { Repository } from '@/utils/repository';
-import { UUID } from 'crypto';
 
 class RoundManager {
   private static _repository = new Repository<Round>();
@@ -9,11 +8,11 @@ class RoundManager {
     this._repository.add(round);
   }
 
-  public static getRoundById(id: UUID): Round | undefined {
+  public static getRoundById(id: string): Round | undefined {
     return this._repository.get(id);
   }
 
-  public static removeRound(id: UUID): void {
+  public static removeRound(id: string): void {
     this._repository.remove(id);
   }
 
