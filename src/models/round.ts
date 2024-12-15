@@ -9,16 +9,19 @@ export class Round {
   private _roundType: RoundType;
   private _roundNumber: number;
   private _totalPlayers: number;
+  private _initialDrawSize: number; // Add this
 
   public constructor(
     matches: Match[],
     roundNumber: number,
-    totalPlayers: number
+    totalPlayers: number,
+    initialDrawSize: number
   ) {
     this._id = uuidv4();
     this._matches = matches;
     this._roundNumber = roundNumber;
     this._totalPlayers = totalPlayers;
+    this._initialDrawSize = initialDrawSize;
     this._roundType = determineRoundType(totalPlayers, roundNumber);
   }
 

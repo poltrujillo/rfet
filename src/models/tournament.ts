@@ -18,6 +18,7 @@ export class Tournament {
   private _type: Type;
   private _competitors: Competitor[] = [];
   private _rounds: Round[] = [];
+  private _initialDrawSize: number;
 
   public constructor(
     name: string,
@@ -35,6 +36,7 @@ export class Tournament {
     this._byes = this.calculateByes(players.length);
     this._size = this.calculateSize(players.length);
     this._competitors = this.calculateInitialCompetitors(players);
+    this._initialDrawSize = this._competitors.length;
   }
 
   public start(): void {
@@ -86,7 +88,12 @@ export class Tournament {
       matches.push(new Match(player1, player2));
     }
 
-    const firstRound = new Round(matches, 1, this._competitors.length);
+    const firstRound = new Round(
+      matches,
+      1,
+      this._competitors.length,
+      this._initialDrawSize
+    );
     this._rounds.push(firstRound);
   }
 
@@ -115,14 +122,25 @@ export class Tournament {
 
     match.setWinner(winner);
 
-    // If the round is complete, create the next round if necessary
+    // Progress to the next round only if the current round is complete
     if (round.isComplete()) {
-      const nextRoundMatches = round.getNextRoundMatches();
-      if (nextRoundMatches.length > 0) {
+      const remainingCompetitors = this._rounds
+        .flatMap((r) => r.matches.map((m) => m.winner))
+        .filter((competitor) => competitor !== null);
+
+      if (remainingCompetitors.length > 1) {
+        const nextRoundMatches: Match[] = [];
+        for (let i = 0; i < remainingCompetitors.length; i += 2) {
+          const player1 = remainingCompetitors[i];
+          const player2 = remainingCompetitors[i + 1] || new Bye();
+          nextRoundMatches.push(new Match(player1, player2));
+        }
+
         const nextRound = new Round(
           nextRoundMatches,
           roundNumber + 1,
-          nextRoundMatches.length * 2
+          this._initialDrawSize,
+          this._initialDrawSize
         );
         this._rounds.push(nextRound);
       }

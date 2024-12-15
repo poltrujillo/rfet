@@ -62,6 +62,10 @@ export class Match {
     return `${player1Name} vs ${player2Name} - Winner: ${winnerName}`;
   }
 
+  public hasBye(): boolean {
+    return this._player1 instanceof Bye || this._player2 instanceof Bye;
+  }
+
   public get player1(): Competitor | null {
     return this._player1;
   }
