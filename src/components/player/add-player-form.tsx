@@ -5,9 +5,9 @@ import { Input } from '../ui/input';
 
 interface AddPlayerFormProps {
   newPlayerName: string;
-  newPlayerRanking: string;
+  newPlayerRanking: number;
   onNameChange: (value: string) => void;
-  onRankingChange: (value: string) => void;
+  onRankingChange: (value: number) => void;
   onAddPlayer: () => void;
 }
 
@@ -29,8 +29,8 @@ export function AddPlayerForm({
       <Input
         type="number"
         placeholder="Ranking"
-        value={newPlayerRanking}
-        onChange={(e) => onRankingChange(e.target.value)}
+        value={String(newPlayerRanking)}
+        onChange={(e) => onRankingChange(Number(e.target.value))}
         className="bg-white text-gray-900 border-gray-200"
       />
       <Button onClick={onAddPlayer}>Add</Button>

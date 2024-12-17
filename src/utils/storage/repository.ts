@@ -1,3 +1,5 @@
+'use client';
+
 export class Repository<T extends { id: string }> {
   private _store: Map<string, T> = new Map();
 

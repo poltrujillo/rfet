@@ -15,6 +15,7 @@ export class LocalStorageRepository<
 
   private loadFromStorage(): void {
     const data = localStorage.getItem(this.storageKey);
+
     if (data) {
       const items = JSON.parse(data) as T[];
       items.forEach((item) => super.add(item));
