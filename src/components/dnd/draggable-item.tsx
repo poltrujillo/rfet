@@ -15,9 +15,9 @@ const DraggableItem: React.FC<Props> = ({ draggableId, index, children }) => {
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
-          className="p-4 m-2 bg-gray-200 rounded-md"
+          className="p-1 m-1 bg-gray-200 rounded shadow"
         >
-          <div {...provided.dragHandleProps} className="cursor-grab">
+          <div {...provided.dragHandleProps} className="cursor-grab text-xs">
             {children}
           </div>
         </div>

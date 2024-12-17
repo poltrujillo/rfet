@@ -13,7 +13,7 @@ const DroppableList: React.FC<Props> = ({ droppableId, children }) => {
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className="p-4 bg-white rounded-lg shadow-sm min-h-[100px]"
+          className="p-4 bg-white rounded-lg min-h-[100px]"
         >
           {children}
           {provided.placeholder}
