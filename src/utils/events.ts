@@ -1,15 +1,17 @@
-type Listener = () => void;
+type EventCallback = () => void;
 
-export class EventEmitter {
-  private listeners: Set<Listener> = new Set();
+class EventEmitter {
+  private listeners: EventCallback[] = [];
 
-  public subscribe(listener: Listener) {
-    this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
+  public subscribe(callback: EventCallback): () => void {
+    this.listeners.push(callback);
+    return () => {
+      this.listeners = this.listeners.filter((cb) => cb !== callback);
+    };
   }
 
-  public emit() {
-    this.listeners.forEach((listener) => listener());
+  public emit(): void {
+    this.listeners.forEach((callback) => callback());
   }
 }
 

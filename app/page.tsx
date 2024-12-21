@@ -2,34 +2,59 @@
 
 import TournamentDraw from '@/components/draw/tournament-draw';
 import { Tournament } from '@/models/tournament';
-import { useState } from 'react';
-import { Player } from '@/models/player';
+import { useState, useEffect } from 'react';
 import { Competitor } from '@/models/competitor';
-
-const initialPlayers = [
-  new Player('Player 1', 1),
-  new Player('Player 2', 3),
-  new Player('Player 3', 6),
-  new Player('Player 4', 4000),
-];
+import TournamentManager from '@/services/tournament';
+import { tournamentChanges } from '@/utils/events';
 
 export default function Home() {
-  const [tournament] = useState(
-    new Tournament('My Tournament', initialPlayers)
-  );
-  const [competitors, setCompetitors] = useState<Competitor[]>(
-    tournament.competitors
-  );
+  const [selectedTournament, setSelectedTournament] =
+    useState<Tournament | null>(null);
+  const [competitors, setCompetitors] = useState<Competitor[]>([]);
+
+  useEffect(() => {
+    const handleTournamentSelected = (event: CustomEvent<Tournament>) => {
+      const tournament = event.detail;
+      setSelectedTournament(tournament);
+      setCompetitors(tournament._competitors || []);
+    };
+
+    window.addEventListener(
+      'tournamentSelected',
+      handleTournamentSelected as EventListener
+    );
+    return () => {
+      window.removeEventListener(
+        'tournamentSelected',
+        handleTournamentSelected as EventListener
+      );
+    };
+  }, []);
 
   const handleReorganize = (newOrder: Competitor[]) => {
-    setCompetitors(newOrder);
-    tournament.reorganizeCompetitors(newOrder);
+    if (selectedTournament) {
+      setCompetitors(newOrder);
+      selectedTournament.reorganizeCompetitors(newOrder);
+    }
   };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Tennis Tournament Draw</h1>
-      <TournamentDraw tournament={tournament} onReorganize={handleReorganize} />
+      {selectedTournament ? (
+        <>
+          <h1 className="text-2xl font-bold mb-4">
+            {selectedTournament._name} Draw
+          </h1>
+          <TournamentDraw
+            tournament={selectedTournament}
+            onReorganize={handleReorganize}
+          />
+        </>
+      ) : (
+        <div className="text-center text-gray-500 mt-10">
+          Select a tournament from the sidebar to view its draw
+        </div>
+      )}
     </div>
   );
 }

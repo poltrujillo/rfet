@@ -3,7 +3,7 @@
 import { Repository } from './repository';
 
 export class LocalStorageRepository<
-  T extends { id: string }
+  T extends { _id: string }
 > extends Repository<T> {
   private readonly storageKey: string;
 
@@ -14,17 +14,29 @@ export class LocalStorageRepository<
   }
 
   private loadFromStorage(): void {
-    const data = localStorage.getItem(this.storageKey);
-
-    if (data) {
-      const items = JSON.parse(data) as T[];
-      items.forEach((item) => super.add(item));
+    try {
+      const data = localStorage.getItem(this.storageKey);
+      if (data) {
+        const items = JSON.parse(data) as T[];
+        this.items.clear(); // Clear existing items first
+        items.forEach((item) => {
+          if (item._id) {
+            this.items.set(item._id, item);
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error loading from storage:', error);
     }
   }
 
   private saveToStorage(): void {
-    const items = super.getAll();
-    localStorage.setItem(this.storageKey, JSON.stringify(items));
+    try {
+      const items = Array.from(this.items.values());
+      localStorage.setItem(this.storageKey, JSON.stringify(items));
+    } catch (error) {
+      console.error('Error saving to storage:', error);
+    }
   }
 
   public add(obj: T): void {

@@ -9,38 +9,25 @@ import { Trash as FaTrash } from 'lucide-react';
 
 interface TournamentsListProps {
   tournaments: Tournament[];
+  onTournamentSelect?: (tournament: Tournament) => void;
+  selectedTournamentId?: string;
 }
 
 export function TournamentsList({
   tournaments: initialTournaments,
+  onTournamentSelect,
+  selectedTournamentId,
 }: TournamentsListProps) {
-  const [tournaments, setTournaments] =
-    useState<Tournament[]>(initialTournaments);
-  const [isLoading, setIsLoading] = useState(true);
+  const [tournaments, setTournaments] = useState(initialTournaments);
+
+  useEffect(() => {
+    setTournaments(initialTournaments);
+  }, [initialTournaments]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tournamentToDelete, setTournamentToDelete] = useState<string | null>(
     null
   );
-
-  useEffect(() => {
-    const loadTournaments = async () => {
-      try {
-        setIsLoading(true);
-        const loadedTournaments = TournamentManager.getAllTournaments();
-
-        setTournaments(loadedTournaments);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadTournaments();
-    const unsubscribe = tournamentChanges.subscribe(loadTournaments);
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
 
   const handleDelete = (id: string) => {
     setTournamentToDelete(id);
@@ -58,9 +45,7 @@ export function TournamentsList({
 
   return (
     <>
-      {isLoading ? (
-        <div className="text-center text-gray-500">Loading tournaments...</div>
-      ) : tournaments.length === 0 ? (
+      {tournaments.length === 0 ? (
         <div className="text-center text-gray-500">
           No tournaments created yet
         </div>
@@ -69,7 +54,13 @@ export function TournamentsList({
           {tournaments.map((tournament) => (
             <div
               key={tournament._id}
-              className="p-2 rounded-md hover:bg-gray-100 cursor-pointer flex justify-between items-center"
+              className={`p-2 rounded-md hover:bg-gray-100 cursor-pointer flex justify-between items-center ${
+                selectedTournamentId === tournament._id ? 'bg-gray-100' : ''
+              }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                onTournamentSelect?.(tournament);
+              }}
             >
               <div>
                 <h3 className="font-medium">{tournament._name}</h3>
@@ -79,7 +70,10 @@ export function TournamentsList({
                 </p>
               </div>
               <button
-                onClick={() => handleDelete(tournament._id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(tournament._id);
+                }}
                 className="text-red-500 flex items-center"
               >
                 <FaTrash className="mr-1" />

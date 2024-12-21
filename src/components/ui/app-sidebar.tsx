@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { tournamentChanges } from '@/utils/events';
 import {
   Dialog,
   DialogContent,
@@ -30,10 +31,20 @@ export function AppSidebar() {
   const [newPlayerRanking, setNewPlayerRanking] = useState<number>(0);
   const [tournamentName, setTournamentName] = useState<string>('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedTournamentId, setSelectedTournamentId] = useState<string>();
 
   useEffect(() => {
-    const loadedTournaments = TournamentManager.getAllTournaments();
-    setTournaments(loadedTournaments);
+    const loadTournaments = () => {
+      const loadedTournaments = TournamentManager.getAllTournaments();
+      setTournaments(loadedTournaments);
+    };
+
+    loadTournaments();
+    const unsubscribe = tournamentChanges.subscribe(loadTournaments);
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const handleAddPlayer = () => {
@@ -61,12 +72,24 @@ export function AppSidebar() {
     }
   };
 
+  const handleTournamentSelect = (tournament: Tournament) => {
+    setSelectedTournamentId(tournament.id);
+    // Dispatch event for the main page
+    window.dispatchEvent(
+      new CustomEvent('tournamentSelected', { detail: tournament })
+    );
+  };
+
   return (
     <Sidebar>
       <SidebarHeader className="font-bold">Tournaments</SidebarHeader>
       <SidebarSeparator />
       <SidebarContent>
-        <TournamentsList tournaments={tournaments} />
+        <TournamentsList
+          tournaments={tournaments}
+          onTournamentSelect={handleTournamentSelect}
+          selectedTournamentId={selectedTournamentId}
+        />
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button className="w-full mb-4">New Tournament</Button>

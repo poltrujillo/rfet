@@ -17,7 +17,7 @@ const TournamentDraw: React.FC<TournamentDrawProps> = ({
   onReorganize,
 }) => {
   const [isClient, setIsClient] = useState(false);
-  const competitors = tournament.competitors;
+  const competitors = tournament._competitors || [];
 
   useEffect(() => {
     setIsClient(true);
@@ -43,11 +43,11 @@ const TournamentDraw: React.FC<TournamentDrawProps> = ({
         <DroppableList droppableId="tournament-bracket">
           {competitors.map((competitor, index) => (
             <DraggableItem
-              key={competitor.id}
-              draggableId={String(competitor.id)}
+              key={competitor._id}
+              draggableId={competitor._id}
               index={index}
             >
-              <PlayerItem name={competitor.name} />
+              <PlayerItem name={competitor._name} />
             </DraggableItem>
           ))}
         </DroppableList>

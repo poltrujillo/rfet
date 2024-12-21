@@ -20,7 +20,21 @@ class TournamentManager {
   }
 
   public static getTournamentById(id: string): Tournament | undefined {
-    return this.getRepository().get(id);
+    const tournament = this.getRepository().get(id);
+    if (tournament) {
+      // Ensure we create a proper Tournament instance
+      const newTournament = new Tournament(
+        tournament._name,
+        tournament._competitors.filter((c) => !c._byes),
+        tournament._priceMoney,
+        tournament._category,
+        tournament._type
+      );
+      // Copy over the stored properties
+      Object.assign(newTournament, tournament);
+      return newTournament;
+    }
+    return undefined;
   }
 
   public static removeTournament(id: string): void {
@@ -29,7 +43,31 @@ class TournamentManager {
   }
 
   public static getAllTournaments(): Tournament[] {
-    return this.getRepository().getAll();
+    try {
+      const tournaments = this.getRepository().getAll();
+      return tournaments.map((t) => {
+        const tournament = new Tournament(
+          t._name,
+          [],
+          t._priceMoney,
+          t._category,
+          t._type
+        );
+        Object.assign(tournament, {
+          _id: t._id,
+          _competitors: t._competitors,
+          _rounds: t._rounds,
+          _byes: t._byes,
+          _size: t._size,
+          _stars: t._stars,
+          _initialDrawSize: t._initialDrawSize,
+        });
+        return tournament;
+      });
+    } catch (error) {
+      console.error('Error getting tournaments:', error);
+      return [];
+    }
   }
 }
 
