@@ -33,6 +33,8 @@ const TournamentDraw: React.FC<TournamentDrawProps> = ({
     onReorganize(reordered);
   };
 
+  console.log('competitors', competitors);
+
   if (!isClient) {
     return null;
   }
