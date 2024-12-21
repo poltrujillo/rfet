@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { DropResult } from '@hello-pangea/dnd';
 import PlayerItem from './player-item';
 import { Competitor } from '@/models/competitor';
@@ -16,7 +16,12 @@ const TournamentDraw: React.FC<TournamentDrawProps> = ({
   tournament,
   onReorganize,
 }) => {
+  const [isClient, setIsClient] = useState(false);
   const competitors = tournament.competitors;
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -28,6 +33,10 @@ const TournamentDraw: React.FC<TournamentDrawProps> = ({
     onReorganize(reordered);
   };
 
+  if (!isClient) {
+    return null;
+  }
+
   return (
     <DragDropContextProvider onDragEnd={handleDragEnd}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -35,7 +44,7 @@ const TournamentDraw: React.FC<TournamentDrawProps> = ({
           {competitors.map((competitor, index) => (
             <DraggableItem
               key={competitor.id}
-              draggableId={competitor.id}
+              draggableId={String(competitor.id)}
               index={index}
             >
               <PlayerItem name={competitor.name} />
