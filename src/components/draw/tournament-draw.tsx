@@ -5,16 +5,19 @@ import { Competitor } from '@/models/competitor';
 import DroppableList from '../dnd/droppable-list';
 import DraggableItem from '../dnd/draggable-item';
 import DragDropContextProvider from '@/context/drag-drop-provider';
+import { Tournament } from '@/models/tournament';
 
 interface TournamentDrawProps {
-  competitors: Competitor[];
+  tournament: Tournament;
   onReorganize: (newOrder: Competitor[]) => void;
 }
 
 const TournamentDraw: React.FC<TournamentDrawProps> = ({
-  competitors,
+  tournament,
   onReorganize,
 }) => {
+  const competitors = tournament.competitors;
+
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
@@ -31,11 +34,11 @@ const TournamentDraw: React.FC<TournamentDrawProps> = ({
         <DroppableList droppableId="tournament-bracket">
           {competitors.map((competitor, index) => (
             <DraggableItem
-              key={competitor.id || `bye-${index}`}
-              draggableId={competitor.id || `bye-${index}`}
+              key={competitor.id}
+              draggableId={competitor.id}
               index={index}
             >
-              <PlayerItem name={competitor.name || 'Bye'} />
+              <PlayerItem name={competitor.name} />
             </DraggableItem>
           ))}
         </DroppableList>

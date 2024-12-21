@@ -3,34 +3,35 @@
 import TournamentDraw from '@/components/draw/tournament-draw';
 import { Tournament } from '@/models/tournament';
 import { useState } from 'react';
+import { Player } from '@/models/player';
+import { Competitor } from '@/models/competitor';
 
 // Example competitors (mocked for illustration)
 const initialPlayers = [
-  { id: '1', name: 'Player 1' },
-  { id: '2', name: 'Player 2' },
-  { id: '3', name: 'Player 3' },
-  { id: '4', name: 'Player 4' },
-  { id: '5', name: 'Player 4' },
-  { id: '6', name: 'Player 4' },
-  { id: '7', name: 'Player 4' },
-  { id: '8', name: 'Player 4' },
+  new Player('Player 1', 1),
+  new Player('Player 2', 3),
+  new Player('Player 3', 6),
+  new Player('Player 4', 4000),
+  // Add more players as needed
 ];
 
 const tournament = new Tournament('My Tournament', initialPlayers);
 
 export default function Home() {
-  const [competitors, setCompetitors] = useState(tournament.competitors);
+  const [competitors, setCompetitors] = useState<Competitor[]>(
+    tournament.competitors
+  );
 
-  const handleReorganize = (newOrder: typeof competitors) => {
+  const handleReorganize = (newOrder: Competitor[]) => {
     setCompetitors(newOrder);
+    tournament.reorganizeCompetitors(newOrder);
+    tournament.start();
   };
 
   return (
     <div>
-      <TournamentDraw
-        competitors={competitors}
-        onReorganize={handleReorganize}
-      />
+      <h1>Tennis Tournament Draw</h1>
+      <TournamentDraw tournament={tournament} onReorganize={handleReorganize} />
     </div>
   );
 }

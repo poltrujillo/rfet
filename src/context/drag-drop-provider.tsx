@@ -1,4 +1,5 @@
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
+import React from 'react';
 
 interface Props {
   children: React.ReactNode;
